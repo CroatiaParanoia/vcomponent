@@ -12,6 +12,7 @@ const options = [
     name: 'companyName',
     rules: [],
     label: '公司名称',
+    $format: (value) => value.toUpperCase(),
   },
   {
     element: 'Select',
@@ -35,7 +36,8 @@ const options = [
       },
       {
         element: 'Text',
-        config: { value: '到这里' },
+        config: { text: '到这里' },
+        $sourceKey: 'text',
       },
       {
         element: 'Input',

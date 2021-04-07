@@ -21,7 +21,7 @@ export default Vue.component('AFormCollectionItem', {
   methods: {
     createChildVNode(createElement, children = []) {
       const { templateItem, dataSource } = this.$props;
-      const { element, name, config } = templateItem;
+      const { element, name, config, $sourceKey = 'value' } = templateItem;
       const tag = FormElementMapping[element];
 
       const hasChildren = !!children.length;
@@ -29,15 +29,17 @@ export default Vue.component('AFormCollectionItem', {
 
       const computedFormValue = (name) => {
         if (hasChildren) return {};
-        if (!name) return config.value;
-        return dataSource[name];
+        const { $format = (v) => v } = templateItem;
+        if (!name) return config[$sourceKey];
+
+        return $format(dataSource[name], dataSource);
       };
 
       const curProps = hasChildren
         ? {}
         : {
             ...config,
-            value: computedFormValue(name),
+            [$sourceKey]: computedFormValue(name),
           };
 
       const mixinValue = { ...curProps, ...this.attrs };
