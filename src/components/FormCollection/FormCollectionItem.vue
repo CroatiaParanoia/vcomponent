@@ -1,5 +1,6 @@
 <script>
 import Vue from 'vue';
+import equal from 'fast-deep-equal';
 import { FormElementMapping } from './config';
 import './../../a-components/Wrapper';
 import './../../a-components/Text';
@@ -21,7 +22,7 @@ export default Vue.component('AFormCollectionItem', {
   methods: {
     createChildVNode(createElement, children = []) {
       const { templateItem, dataSource } = this.$props;
-      const { element, name, config, $sourceKey = 'value' } = templateItem;
+      const { element, name, config = {}, $sourceKey = 'value' } = templateItem;
       const tag = FormElementMapping[element];
 
       const hasChildren = !!children.length;
@@ -30,9 +31,12 @@ export default Vue.component('AFormCollectionItem', {
       const computedFormValue = (name) => {
         if (hasChildren) return {};
         const { $format = (v) => v } = templateItem;
-        if (!name) return config[$sourceKey];
-
-        return $format(dataSource[name], dataSource);
+        if (!name) return $format(config[$sourceKey], dataSource);
+        const newValue = $format(dataSource[name], dataSource);
+        if (!equal(newValue, dataSource[name])) {
+          dataSource[name] = newValue;
+        }
+        return dataSource[name];
       };
 
       const curProps = hasChildren

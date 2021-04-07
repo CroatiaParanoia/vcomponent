@@ -12,7 +12,9 @@ const options = [
     name: 'companyName',
     rules: [],
     label: '公司名称',
-    $format: (value) => value.toUpperCase(),
+    $format: (value, dataSource) => {
+      return value.toUpperCase();
+    },
   },
   {
     element: 'Select',
@@ -33,6 +35,7 @@ const options = [
         config: { placeholder: '请输入公司名称2' },
         name: 'companyName2',
         rules: [{ required: true, message: '请输入公司名称2' }],
+        $format: (v) => v.toUpperCase(),
       },
       {
         element: 'Text',
@@ -45,6 +48,47 @@ const options = [
         config: { placeholder: '请输入公司名称3' },
         name: 'companyName3',
         rules: [{ required: true, message: '请输入公司名称3' }],
+      },
+    ],
+  },
+  {
+    element: 'Wrapper',
+    label: '算算',
+    children: [
+      {
+        element: 'Input',
+        style: 'width: 120px',
+        config: { placeholder: '参数1' },
+        name: 'add1',
+        rules: [{ required: true, message: '请输入参数1' }],
+        $format: (v) => v.toUpperCase(),
+      },
+      {
+        element: 'Text',
+        config: { text: '+' },
+        $sourceKey: 'text',
+      },
+      {
+        element: 'Input',
+        style: 'width: 120px',
+        config: { placeholder: '参数2' },
+        name: 'add2',
+        rules: [{ required: true, message: '请输入参数2' }],
+      },
+      {
+        element: 'Text',
+        config: { text: '=' },
+        $sourceKey: 'text',
+      },
+      {
+        element: 'Text',
+        config: { text: '' },
+        $sourceKey: 'text',
+        $format: (_, dataSource) => {
+          console.log(dataSource, 'dataSource');
+          const value = (Number(dataSource.add1) || 0) + (Number(dataSource.add2) || 0);
+          return String(value);
+        },
       },
     ],
   },
@@ -83,6 +127,10 @@ const Template = (args, { argTypes }) => ({
       </div> 
     </FormCollection>
 
+    <el-button @click="handleOutput">
+      输出
+    </el-button>
+
     ** 你可以在下面的 **Controls** 面板进行对 props 的修改， 然后观看视图变更。
     <br />
 
@@ -101,10 +149,12 @@ const Template = (args, { argTypes }) => ({
   data() {
     return {
       dataSource: {
-        companyName: '',
+        companyName: 'a',
         address: '',
         companyName2: '',
         companyName3: '',
+        add1: '',
+        add2: '',
       },
     };
   },
@@ -116,6 +166,11 @@ const Template = (args, { argTypes }) => ({
         config: { options: addressOptions },
       });
     }, 3000);
+  },
+  methods: {
+    handleOutput() {
+      console.log(this.dataSource, 'dataSource');
+    },
   },
 });
 
