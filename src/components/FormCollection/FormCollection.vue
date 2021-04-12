@@ -1,7 +1,7 @@
 <script>
 import Vue from 'vue';
 import formController from './../../mixins/formController';
-import './FormCollectionItem';
+import './FormItemGroup';
 
 export default Vue.component('FormCollection', {
   mixins: [formController],
@@ -54,12 +54,14 @@ export default Vue.component('FormCollection', {
   render(createElement) {
     const { options, dataSource, formName, ...otherProps } = this.$props;
 
-    console.log(formName, 'thisssss');
-
     const scopedSlots = Object.entries(this.$slots).reduce((res, [key, value]) => {
       res[key] = () => value;
       return res;
     }, {});
+
+    const collectionGroupVNode = createElement('a-form-item-group', {
+      props: { options, scopedSlots, dataSource },
+    });
 
     return createElement(
       'el-form',
@@ -68,13 +70,14 @@ export default Vue.component('FormCollection', {
         class: 'a-form-collection',
         ref: formName,
       },
-      options.map((item, index) => {
-        return createElement('a-form-collection-item', {
-          props: { templateItem: item, dataSource },
-          key: item.name || index,
-          scopedSlots: scopedSlots,
-        });
-      }),
+      [collectionGroupVNode],
+      // options.map((item, index) => {
+      //   return createElement('a-form-collection-item', {
+      //     props: { templateItem: item, dataSource },
+      //     key: item.name || index,
+      //     scopedSlots: scopedSlots,
+      //   });
+      // }),
     );
   },
 });
