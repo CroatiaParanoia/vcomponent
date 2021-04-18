@@ -319,8 +319,8 @@ const Template3 = (args, { argTypes }) => ({
     <div style="display: flex">
     
       <div style="flex: 1">
-        input:
-        <pre>{{ options }}</pre>
+        input.template:
+        <pre>{{ template }}</pre>
       </div>
       <div style="flex: 1">
         output:
