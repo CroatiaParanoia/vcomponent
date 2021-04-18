@@ -56,13 +56,9 @@ const FormCollectionItem = {
         [$sourceKey]: this.computedFormValue(name),
       };
 
-      console.log(this.$slots, 'slots');
-
       if (this.element === 'Slot') {
         return this.$slots.default || this.$scopedSlots[name];
       }
-
-      console.log(currentProps, 'currentProps');
 
       return createEl(
         formElement,
