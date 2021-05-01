@@ -1,4 +1,5 @@
 import FormCollection, { FormItems, FormItem, updateOptions } from './../components/FormCollection';
+import SelectGroup from './../a-components/SelectGroup';
 
 export default {
   title: 'Example/FormCollection',
@@ -7,7 +8,7 @@ export default {
 
 const formMapping = {
   Input: 'el-input',
-  Select: 'el-select',
+  Select: SelectGroup,
 };
 
 FormCollection.provide({ formMapping });
@@ -348,6 +349,88 @@ export const DemoForFormItem = Template3.bind({});
 
 DemoForFormItem.args = {
   template: personInfo[2],
+  labelWidth: '120px',
+  labelPosition: 'right',
+};
+
+const Template4 = (args, { argTypes }) => ({
+  props: Object.keys(argTypes),
+  components: { FormCollection },
+  template: `
+  <div>
+    <FormCollection :dataSource="dataSource" v-bind="$props" />
+  </div>`,
+  data() {
+    return {
+      dataSource: {
+        isGirl: '',
+        weChartNum: '',
+        leaveWay: '',
+      },
+    };
+  },
+  methods: {
+    handleOutput() {
+      console.log(this.dataSource, 'dataSource');
+    },
+  },
+});
+
+export const Visible = Template4.bind({});
+
+Visible.args = {
+  options: [
+    {
+      element: 'Select',
+      label: '是否女生',
+      name: 'isGirl',
+      config: {
+        placeholder: '请选择是不是女生',
+        options: [
+          {
+            label: '是',
+            value: '1',
+          },
+          {
+            label: '否',
+            value: '0',
+          },
+        ],
+      },
+    },
+    {
+      element: 'Input',
+      label: '微信号',
+      name: 'weChartNum',
+      config: {
+        placeholder: '请输入你的微信号',
+      },
+      $visible(dataSource) {
+        return dataSource.isGirl === '1';
+      },
+    },
+    {
+      element: 'Select',
+      label: '离开方式',
+      name: 'leaveWay',
+      config: {
+        placeholder: '请选择离开方式',
+        options: [
+          {
+            label: '这样离开',
+            value: '这样离开',
+          },
+          {
+            label: '那样离开',
+            value: '那样离开',
+          },
+        ],
+      },
+      $visible(dataSource) {
+        return dataSource.isGirl === '0';
+      },
+    },
+  ],
   labelWidth: '120px',
   labelPosition: 'right',
 };

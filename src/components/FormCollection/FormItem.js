@@ -105,6 +105,12 @@ const FormCollectionItem = {
   },
 
   render(createEl) {
+    const { $visible = () => true } = this.template;
+
+    const isRender = $visible(this.value);
+
+    if (!isRender) return null;
+
     if (this.isWrapper) {
       return this.createFormCollectionItems(createEl);
     }
