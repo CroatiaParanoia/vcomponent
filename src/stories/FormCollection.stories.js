@@ -324,7 +324,6 @@ const Template3 = (args, { argTypes }) => ({
       </div>
       <div style="flex: 1">
         output:
-        <pre>{{ dataSource }}</pre>
       </div>
     </div>
   </div>`,

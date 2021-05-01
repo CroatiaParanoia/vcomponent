@@ -6,7 +6,6 @@ console.log(ElementUI, 'elementUI');
 
 Object.values(ElementUI).forEach((component) => {
   if (typeof component === 'object' && component.name) {
-    // console.log(component.name, component, 'componentcomponentcomponentcomponent');
     Vue.component(component.name, component);
   }
 });
